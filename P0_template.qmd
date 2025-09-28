@@ -1,0 +1,117 @@
+---
+title: "Client Report - Project 0: Introduction"
+subtitle: "Course DS 250"
+author: "Ryan Lee"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import pandas as pd
+import numpy as np
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+
+```{python}
+# Learn morea about Code Cells: https://quarto.org/docs/reference/cells/cells-jupyter.html
+
+# Include and execute your code here
+from palmerpenguins import load_penguins
+df = load_penguins()
+```
+
+## QUESTION|TASK 1
+
+__Include the tables created from [PY4DS: CH2 Data Visualization](https://aeturrell.github.io/python4DS/data-visualise.html) used to create the above chart__
+
+This is a chart that shows just the first and last five entries of the penguins.  
+```{python}
+penguins = load_penguins()
+penguins
+```
+
+---
+
+With the tag ".info()", we can see a summary of the chart. It makes the info easier to read at a glance. 
+```{python}
+penguins.info()
+```
+
+---
+
+## QUESTION|TASK 2
+
+__Recreate the example charts from [PY4DS: CH2 Data Visualization](https://aeturrell.github.io/python4DS/data-visualise.html) of the textbook.__
+
+Now this is us taking the data from the penguins and compairing Body Mass with Flipper Length. 
+As you see, the info is changed from a chart to a dotted graph. 
+```{python}
+ggplot(data=penguins, mapping=aes(x="flipper_length_mm", y="body_mass_g")
+) + geom_point()
+```
+
+---
+
+When we add color on the graph, we can see that there are three different types of Penguin Species that we charted. 
+The Adelie tend to have less Body Mass along side with the Chinstrap. 
+The Gentoo have more Body mass and Larger flippers. 
+```{python}
+ggplot(
+  data = penguins, 
+  mapping = aes(x = "flipper_length_mm", y = "body_mass_g")
+  ) + geom_point(mapping = aes(color = "species")) 
+```
+
+---
+
+When we smooth out the averages, we can see the average of each point of each species.
+While it looked like Green was farther to the left of Red, we can see that the average line of Red is more than the average line of green.
+```{python}
+ggplot(
+  data=penguins,
+  mapping=aes(x="flipper_length_mm", y="body_mass_g", color="species"),
+  ) + geom_point(
+  ) + geom_smooth(method="lm")
+```
+
+---
+
+With finding the average of the Species, we can see the line that helps us understand the data. 
+```{python}
+ggplot(
+  data=penguins, 
+  mapping=aes(x="flipper_length_mm", y="body_mass_g")
+  ) + geom_point(mapping=aes(color="species")
+  ) + geom_smooth(method="lm")
+```
+
+---
+
+This one was to practice changing the species dots into different symbols. Can help people who may be color blind or differentiate the different points. 
+```{python}
+ggplot(data=penguins, mapping=aes(x="flipper_length_mm", y="body_mass_g")
+  ) + geom_point(mapping=aes(color="species", shape="species")
+  ) + geom_smooth(method="lm")
+```
