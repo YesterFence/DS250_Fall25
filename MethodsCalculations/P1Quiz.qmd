@@ -1,0 +1,30 @@
+```{python}
+# Read in libraries
+import pandas as pd
+import numpy as np
+from lets_plot import *
+LetsPlot.setup_html(isolated_frame=True)
+# read in df
+url = 'https://raw.githubusercontent.com/byuidatascience/data4names/master/data-raw/names_year/names_year.csv'
+df = pd.read_csv(url)
+```
+
+```{python}
+    total_oliver_ut = df[df["name"] == "Oliver"]["UT"].sum()
+    print(f"Total occurrences of 'Oliver' in Utah (UT): {total_oliver_ut}")
+
+    # name_oliver = ["Oliver"]
+    # df[df["name"].isin(name_oliver)]
+
+    # name_Felisha = ["Felisha"]
+    # df[df["name"].isin(name_Felisha)]
+
+    # name_oliver = "Oliver"
+    # state_ut = "UT"
+
+    # count = df[(df["Oliver"] == name_oliver) & (df["UT"] == state_ut)].shape[0]
+    
+    # print(f"{name_oliver} {state_ut} {count}")
+
+
+```

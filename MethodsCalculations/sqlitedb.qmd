@@ -1,0 +1,89 @@
+---
+title: "Client Report - Finding Relationships in Baseball"
+subtitle: "Course DS 250"
+author: "Ryan Lee"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import pandas as pd 
+import numpy as np
+import sqlite3
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+```{python}
+# Learn morea about Code Cells: https://quarto.org/docs/reference/cells/cells-jupyter.html
+
+# Include and execute your code here
+sqlite_file = 'lahmansbaseballdb.sqlite'
+# this file must be in the same location as your .qmd or .py file
+con = sqlite3.connect(sqlite_file)
+```
+
+```{python}
+# %%
+# careful to list your path to the file or save it in the same place as your .qmd or .py file
+sqlite_file = 'lahmansbaseballdb.sqlite'
+con = sqlite3.connect(sqlite_file)
+
+q = 'SELECT * FROM allstarfull LIMIT 5'
+results = pd.read_sql_query(q,con)
+
+results
+# %%
+```
+
+```{python}
+# %%
+
+# must have the .sqlite file in the exact same folder or list your entire path to the file.
+
+q = '''
+SELECT *
+FROM batting
+LIMIT 2;
+'''
+
+qr1 = pd.read_sql_query(q,con)
+qr1
+```
+
+```{python}
+q = '''
+SELECT 
+    playerID,
+    yearID,
+    teamID,
+    AB,
+    H,
+    ROUND(CAST(H AS FLOAT) / AB, 3) AS batting_average
+FROM Batting
+WHERE playerID = 'addybo01'
+  AND yearID = 1871;
+'''
+qr2 = pd.read_sql_query(q, con)
+qr2
+```

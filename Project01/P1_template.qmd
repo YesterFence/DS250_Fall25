@@ -1,0 +1,175 @@
+---
+title: "Client Report - What's in a Name?"
+subtitle: "Course DS 250"
+author: "Ryan Lee"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import pandas as pd
+import numpy as np
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+
+## Project Notes
+
+__For Project 1 the answer to each question should include a chart **and** a written response. The years labels on your charts should not include a comma. At least **two** of your charts must include reference marks.__  
+
+```{python}
+# Learn morea about Code Cells: https://quarto.org/docs/reference/cells/cells-jupyter.html
+
+# Include and execute your code here
+df = pd.read_csv("https://github.com/byuidatascience/data4names/raw/master/data-raw/names_year/names_year.csv")
+```
+
+## QUESTION|TASK 1
+
+__How does your name at your birth year compare to its use historically?__
+
+_My Name was given to me on the descent of popularity. With the most people named Ryan in 1990, It's been on a steady decent eversince. We remember or know famous people like Ryan Renolds, Ryan Seacrest, or even Ryan Gosling, these are people from the peak of the name giving._
+
+```{python}
+myName = df.query('name == "Ryan"')
+(
+  ggplot(data = myName,
+  mapping = aes(x= 'year', y= 'Total')) +
+  labs(title = "The Many Names of Ryan") +
+  geom_line() +
+  geom_point(x=myName.loc[myName['Total'].idxmax(), 'year'], 
+             y=myName['Total'].max(), 
+             color="green", size=4, shape=21, fill="green", alpha = 0.5) +
+  geom_text(x= 1980, y= 19000, label=f"Apex of the Name", color="black", size=8) +
+  geom_rect(xmin = 1996, xmax = 1998, ymin = 1, ymax = 20000, fill = "red", alpha = .5, color = "rgba(0,0,0,0)") +
+  geom_text(x= 1989, y= 5000, label=f"Year I was born", color="black", size=6, angle=45) +
+  scale_x_continuous(format = 'd')
+)
+
+```
+
+
+## QUESTION|TASK 2
+
+__If you talked to someone named Brittany on the phone, what is your guess of his or her age? What ages would you not guess?__
+
+_This chart shows that the most people with the name of Brittany were in 1990. So a majority of people between the years of 1985 and 1997 will be born with that name._
+
+```{python}
+soBrittany = df.query('name == "Brittany"')
+(
+  ggplot (data = soBrittany,
+  mapping = aes(x= 'year', y= 'Total')) +
+  labs(title = "Ages of Brittany") +
+  geom_point() +
+  geom_rect(xmin = 1985, xmax = 1996, ymin = 15000, ymax = 33600, fill = "red", alpha = .2, color = "rgba(0,0,0,0)") +
+  geom_text(x= 1982, y= 25000, label=f"Best guess", color="black", size=6, angle=45) +
+  scale_x_continuous(format = 'd')
+)
+
+```
+
+
+## QUESTION|TASK 3
+
+__Mary, Martha, Peter, and Paul are all Christian names. From 1920 - 2000, compare the name usage of each of the four names in a single chart. What trends do you notice?__
+
+_I noticed that there were many people that were with the name of Mary before the 1960's. Then after the 1980's, all of the names were under 10,000.
+A pattern is that most people today don't want to be associated with anything biblical, causeing such low numbers for today. _
+
+```{python}
+fourNames = df.query('name == ["Mary", "Martha", "Peter", "Paul"]')
+(
+  ggplot (data = fourNames,
+  mapping = aes(x= 'year', y= 'Total', color = 'name')) +
+  geom_line() +
+  labs(title = "Pattern of Biblical Names") +
+  scale_x_continuous(limits = [1920, 2000], format = 'd')
+)
+
+```
+
+
+
+## QUESTION|TASK 4
+
+__Think of a unique name from a famous movie. Plot the usage of that name and see how changes line up with the movie release. Does it look like the movie had an effect on usage?__  
+
+_Nightmare on Elm Street has a huge impact in the horror culture. After the first film that was made, a surge of people started naming their kids after a killer?
+Over all, I do believe that this data does line up with people nameing their kids Freddy. 
+Also, I wanted to see if Freddy Mercury had any affect on the chart as well, but no major changes are seen. _
+
+```{python}
+scarryMovie = df.query('name == "Freddy"')
+(
+  ggplot (data = scarryMovie,
+  mapping = aes(x= 'year', y= 'Total')) +
+  labs(title = "Freddy: Nightmare on Elm Street") +
+  geom_point() +
+  geom_rect(xmin = 1983, xmax = 1985, ymin = 100, ymax = 500, fill = "red", alpha = .2, color = "red") +
+  geom_text(x= 1979, y= 400, label=f"First Movie \nRelease", color="red", size=5, angle = 45) +
+  geom_rect(xmin = 1985, xmax = 1987, ymin = 150, ymax = 550, fill = "blue", alpha = .2, color = "blue") +
+  geom_text(x= 1992, y= 400, label=f"Second Movie \nRelease", color="blue", size=5, angle = 315) +
+  geom_rect(xmin = 1973, xmax = 1975, ymin = 50, ymax = 450, fill = "orange", alpha = .2, color = "orange") +
+  geom_text(x= 1965, y= 400, label=f"Freddy Mercury \nBecomes Famous", color="orange", size=5, angle = 315) +
+  scale_x_continuous(format = 'd')
+)
+
+
+```
+
+---
+
+## STRETCH QUESTION|TASK 1
+
+__Reproduce the chart Elliot using the data from the `names_year.csv` file.__ 
+
+_The things I learned in this Stretch Question was how to get the chart to not only get the name of the person who I'm graphing, but to also change the color of the chart as well. I learned that by just adding the name of the person would make the line red, and by manually changing the colors was the key._
+
+```{python}
+isElliot = df.query('name == "Elliot"')
+(
+  ggplot(data = isElliot,
+  mapping = aes(x= 'year', y= 'Total', color= "name")) +
+  geom_line() +
+  scale_color_manual(values={"Elliot": "blue"}) +
+  scale_x_continuous(limits = [1950, 2020], format = 'd', expand=[0.005, 0.005]) +
+  geom_vline(xintercept = 1982, color = "red", linetype = 2) +
+  geom_vline(xintercept = 1985, color = "red", linetype = 2) +
+  geom_vline(xintercept = 2001, color = "red", linetype = 2) +
+  geom_text(label = "E.T Released", x= 1974 , y= 1250 , size = 6, color = "black", angle = 0) +
+  geom_text(label = "Second Release", x= 1993, y= 1250, size = 6, color = 'black', angle = 0) +
+  geom_text(label = "Third Release", x= 2009, y= 1250, size = 6, color = 'black', angle = 0) +
+  theme
+  (
+    panel_background=element_rect(fill="lightblue"),
+    legend_justification= [1,1]
+  )
+)
+
+
+```
+
+
+---
