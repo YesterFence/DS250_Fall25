@@ -1,0 +1,57 @@
+```{python}
+import pandas as pd
+import numpy as np
+from lets_plot import *
+LetsPlot.setup_html(isolated_frame=True)
+url = 'https://github.com/fivethirtyeight/data/raw/master/star-wars-survey/StarWars.csv'
+```
+
+```{python}
+df = pd.read_csv(url, encoding_errors="ignore")
+
+df.columns = [
+    'respondent_id', 'seen_any_starwars', 'starwars_fan', 'seen_epi_1', 'seen_epi_2', 'seen_epi_3',
+    'seen_epi_4', 'seen_epi_5', 'seen_epi_6', 'rank_epi_1', 'rank_epi_2', 'rank_epi_3', 
+    'rank_epi_4', 'rank_epi_5', 'rank_epi_6', 'han_solo', 'luke_skywalker', 'princess_leia_organa',
+    'anakin_skywalker', 'obi_wan_kenobi', 'emperor_palpatine', 'darth_vader', 'lando_calrissian',
+    'boba_fett', 'c3po', 'r2d2', 'jar_jar_binks', 'padme_amidala', 'yoda',
+    'who_shot_first', 'expanded_universe', 'fan_expanded_universe',
+    'fan_star_trek', 'gender', 'age', 'household_income', 'education', 'location'
+]
+
+seen_movies = ['seen_epi_1', 'seen_epi_2', 'seen_epi_3', 'seen_epi_4', 'seen_epi_5', 'seen_epi_6']
+df_filtered = df[df[seen_movies].notnull().any(axis=1)]
+
+watched_any = df[seen_movies].notna().any(axis=1)
+percentage = watched_any.mean() * 100
+print(f"{percentage}")
+
+(watched_any).sum() / watched_any.sum() * 100
+
+```
+
+```{python}
+watched_any = df[seen_movies].notnull().any(axis=1)
+male_watched_any = df[watched_any & (df['gender'] == 'Male')]
+len(male_watched_any)
+
+is_male = df['gender'] == 'Male'
+percentage_male_watched = (watched_any & is_male).mean()
+
+percentage_of_watchers_that_are_male = (
+    df.loc[watched_any, 'gender'].eq('Male').mean()
+)
+
+print("Total rows:", len(df))
+print("Total males:", (df['gender'] == 'Male').sum())
+print("Males who watched any:", (watched_any & (df['gender'] == 'Male')).sum())
+print("Total who watched any:", watched_any.sum())
+
+watched_any = df[seen_movies].notna().any(axis=1)
+is_male = df['gender'] == 'Male'
+male_total = is_male.sum()
+male_seen = (watched_any & is_male).sum()
+
+q2 = male_seen / male_total * 100
+print(male_total, male_seen, f"{q2:.4f}%")
+```
